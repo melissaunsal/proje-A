@@ -27,6 +27,8 @@ export const register = async (email, password) => {
   try {
     const { user } = await createUserWithEmailAndPassword(auth, email, password)
     await setDoc(doc(db, "fals", auth.currentUser.uid), {
+      ["approved"]: [
+      ]
 
     });
     toast.success('Success')

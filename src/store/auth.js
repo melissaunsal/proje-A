@@ -24,4 +24,5 @@ const auth = createSlice({
 
 })
 export const { login, logout } = auth.actions
+
 export default auth.reducer 

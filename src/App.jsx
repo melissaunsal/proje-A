@@ -4,15 +4,13 @@ import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
 import { Toaster } from 'react-hot-toast';
 import Single from "./pages/single/Single";
-import Fal from "./pages/fal/fal"
-import Admin from "./admin/admin"
-
+import Fal from "./pages/fal/fal";
+import Admin from "./admin/admin";
 
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import Fallarım from "./pages/fallarım/fallarım";
 
 function App() {
-  
-
   return (
     <Router>
       <div>
@@ -30,6 +28,7 @@ function App() {
             <Register />
              
           </Route>
+          <Route path="/fallarım"> <Fallarım/><Toaster /></Route>
           <Route path="/fal"><Fal/><Toaster /></Route>
           <Route path="/admin"><Admin/><Toaster /></Route>
           <Route path="/login"> <Toaster /><Login /></Route>

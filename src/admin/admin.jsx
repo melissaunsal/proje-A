@@ -1,4 +1,4 @@
-import { collection, doc, getDoc, getDocs, onSnapshot } from 'firebase/firestore';
+import { collection, doc, Firestore, getDoc, getDocs, onSnapshot } from 'firebase/firestore';
 import React from 'react'
 import { useEffect } from 'react';
 import { useState } from 'react';
@@ -7,35 +7,53 @@ import { auth, db } from '../pages/login/Login';
 
 function Admin() {
 
-    const [fals, setFals] = useState(false)
-
+    const [fals, setFals] = useState([])
+    let dizi = []
     useEffect(() => {
-        const unsub = onSnapshot(collection(db, "fals"), (querySnapshot) => {
-            const documents = querySnapshot.docs.map((doc) => {
-                setFals(doc.data());
+        onSnapshot(collection(db, "fals"), (querySnapshot) => {
+            querySnapshot.forEach(element => {
+                console.log(element.data().approved)
+                //Check
+                element?.data().approved?.forEach(element => {
+                    dizi.push(element);
+                    //console.log(element)
+                });
+                console.log(dizi)
+                setFals(dizi)
             });
         });
-        return () => unsub();
     }, [])
-    console.log(fals);
+    // console.log(fals);
     return (
-        <div className=''>
-            {
-                !fals && <h1 className='text-dark'>Loading....</h1>
-            }
-            {
-                fals && <div>
-
+        <div >
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Adı Soyadı</th>
+                        <th scope="col">E-mail</th>
+                        <th scope="col">Bio</th>
+                        <th scope="col">Fotoğraf</th>
+                    </tr>
+                </thead>
+                <tbody>
                     {
 
-                        fals?.approved?.map((falItem) => {
-                            <p>{falItem}</p>
-                        })
+                       fals && fals.map((element, value) => (
+
+                            <tr key={value}>
+                                <td scope="row">{element.name}</td>
+                                <td>{element.email}</td>
+                                <td>{element.bio}</td>
+                                <td><img style={{ width: 250 }} src={element.file} alt="" /></td>
+                            </tr>
+                        ))
                     }
-                </div>
-            }
+
+                </tbody>
+            </table>
 
         </div>
+
     )
 }
 

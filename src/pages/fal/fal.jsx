@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import "../login/login.css";
 import { useState } from 'react';
 import toast from 'react-hot-toast';
-import { collection, doc, getDoc, getDocs, setDoc, updateDoc } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, onSnapshot, setDoc, updateDoc } from "firebase/firestore";
 import { useSelector } from 'react-redux';
 import { db, storage } from '../login/Login';
 import { getDownloadURL, ref, uploadBytes, uploadBytesResumable } from 'firebase/storage';
@@ -18,12 +18,44 @@ function Fal() {
 
   const user = useSelector(state => state.auth.user)
 
+  // let dizi = []
+  // useEffect(() => {
+  //   onSnapshot(collection(db, "fals"), (querySnapshot) => {
+  //     querySnapshot.forEach(element => {
+  //       console.log(element.data().approved)
+  //       //Check
+  //       element?.data().approved?.forEach(element => {
+  //         dizi.push(element);
+  //         //console.log(element)
+  //       });
+  //       console.log(dizi)
+  //       setUserFals(dizi)
+  //     });
+  //   });
+  // }, [])
+
   //Inputtan alınan image dosyaası
   const handleImageChange = (e) => {
     if (e.target.files[0]) {
       setImage(e.target.files[0]);
     }
   };
+
+
+  const getFals = async () => {
+    const querySnapshot = await getDoc(doc(db, "fals", user.uid))
+      .then((querySnapshot) => {
+        console.log(querySnapshot?.data()?.approved);
+        setUserFals(querySnapshot?.data()?.approved);
+      })
+  }
+
+  useEffect(() => {
+    getFals()
+  }, [])
+
+  console.log(userFals);
+
   const handleSubmit = async e => {
     e.preventDefault()
 
@@ -33,19 +65,19 @@ function Fal() {
 
         const imageRef = ref(storage, `images/fals/${user.uid}/${uuidv4()}`);
         uploadBytes(imageRef, image)
-          .then( async () => {
+          .then(async () => {
             getDownloadURL(imageRef)
-              .then( async (url) => {
+              .then(async (url) => {
 
-                const querySnapshot =  await getDoc(doc(db, "fals", user.uid))
-                  .then((querySnapshot) => {
-                    console.log(querySnapshot.data()?.approved);
-                      setUserFals(querySnapshot.data());
-                  })
-                console.log("usser",userFals.approved);
+                // const querySnapshot = await getDoc(doc(db, "fals", user.uid))
+                //   .then((querySnapshot) => {
+                //     console.log(querySnapshot?.data()?.approved);
+                //     setUserFals(querySnapshot?.data()?.approved);
+                //   })
+
                 updateDoc(doc(db, "fals", user.uid), {
                   ["approved"]: [
-                    ...userFals.approved,
+                    ...userFals,
                     {
                       name: name,
                       email: email,
@@ -57,7 +89,7 @@ function Fal() {
                 }, { merge: true });
               })
               .catch((error) => {
-                console.log(error.message, "error getting the image url");
+                console.log(error.message);
               });
             setImage("");
             setBio("");
