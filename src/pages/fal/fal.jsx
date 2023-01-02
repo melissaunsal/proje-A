@@ -125,7 +125,7 @@ function Fal() {
         <textarea className="loginInput" type="text" value={bio} onChange={e => setBio(e.target.value)} placeholder="Yaşınız, kariyer durumu, medeni durumunuzu belirtiniz..." />
         <label>Resminiz:</label>
         <input className="loginInput" type="file" onChange={handleImageChange} id="myimg" placeholder="Enter your name..." />
-        <button className="loginButton" disable={!email || !name || !bio || !image} type="submit " >Submit</button>
+        <button className="loginButton" disable={!email || !name || !bio || !image} type="submit " >E-MAİL İLE CEVAP AL</button>
       </form>
 
     </div>

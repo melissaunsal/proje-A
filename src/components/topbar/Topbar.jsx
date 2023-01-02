@@ -45,6 +45,7 @@ export default function Topbar() {
 
                             </li>
                         }
+                        
                         {
                             user.email === "admin@gmail.com" && <li className="topListItem">
                                 <Link className="link" to="/Admin">
@@ -60,8 +61,20 @@ export default function Topbar() {
                                 <Link className="link" to="/Fal">
                                     FAL BAK
                                 </Link>
-
+                               
                             </li>
+                            
+                        }
+                        {
+                            user.email !== "admin@gmail.com" &&
+
+                            <li className="topListItem">
+                                <Link className="link" to="/Quote">
+                                    ALINTILAR
+                                </Link>
+                               
+                            </li>
+                            
                         }
                     </ul>
                 </div>
